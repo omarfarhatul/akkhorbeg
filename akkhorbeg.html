@@ -1,0 +1,1418 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>অক্ষরবেগ — বাংলা টাইপিং স্পিড টেস্ট</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&family=Tiro+Bangla&family=Tiro+Devanagari+Hindi&family=Noto+Sans+Devanagari:wght@400;600&family=Noto+Sans+Arabic:wght@400;600&family=Noto+Nastaliq+Urdu:wght@400;600&family=Noto+Sans+JP:wght@400;600&family=Noto+Sans+SC:wght@400;600&family=Noto+Sans+KR:wght@400;600&family=Noto+Sans:wght@400;500;600;700&family=Lora:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#231815;
+    --paper:#f4ead9;
+    --paper-2:#ece0c8;
+    --terracotta:#bb4430;
+    --terracotta-deep:#8f2e20;
+    --teal:#2c5d54;
+    --gold:#c98a2c;
+    --line:#d8c8a8;
+    --good:#2c5d54;
+    --bad:#bb4430;
+    --muted:#8a7a5c;
+    --card:#fbf6ea;
+    --shadow:rgba(35,24,21,0.06);
+    --overlay-bg:rgba(35,24,21,0.55);
+    color-scheme:light;
+    transition:background-color .25s ease, color .25s ease;
+  }
+  html[data-theme="dark"]{
+    --ink:#ece4d6;
+    --paper:#16140f;
+    --paper-2:#1d1a14;
+    --terracotta:#e0654a;
+    --terracotta-deep:#ff8266;
+    --teal:#4fae9c;
+    --gold:#e3ad53;
+    --line:#332d22;
+    --good:#4fae9c;
+    --bad:#e0654a;
+    --muted:#a39879;
+    --card:#1c1913;
+    --shadow:rgba(0,0,0,0.45);
+    --overlay-bg:rgba(0,0,0,0.7);
+    color-scheme:dark;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:
+      radial-gradient(circle at 12% 8%, rgba(187,68,48,0.07), transparent 40%),
+      radial-gradient(circle at 90% 85%, rgba(44,93,84,0.08), transparent 45%),
+      var(--paper);
+    color:var(--ink);
+    font-family:'Hind Siliguri', sans-serif;
+    min-height:100vh;
+    padding:0 0 60px;
+    transition:background-color .3s ease, color .3s ease;
+  }
+
+  /* ---------- Header ---------- */
+  header{
+    padding:36px 20px 18px;
+    text-align:center;
+    position:relative;
+  }
+  .alpona{
+    position:absolute;
+    top:0;left:0;right:0;
+    height:6px;
+    background:repeating-linear-gradient(90deg,
+      var(--terracotta) 0 24px,
+      var(--gold) 24px 48px,
+      var(--teal) 48px 72px);
+    opacity:0.85;
+  }
+  .brand{
+    font-family:'Tiro Bangla', serif;
+    font-size:clamp(2.2rem, 6vw, 3.4rem);
+    color:var(--terracotta-deep);
+    letter-spacing:0.5px;
+    margin:10px 0 4px;
+  }
+  .brand span{ color:var(--teal); }
+  .brand-translit{
+    font-family:'JetBrains Mono', monospace;
+    font-size:0.95rem;
+    letter-spacing:0.12em;
+    color:var(--muted);
+    margin:0 0 14px;
+    text-transform:uppercase;
+  }
+  .tagline{
+    color:var(--muted);
+    font-size:1.02rem;
+    margin:0 auto;
+    max-width:520px;
+  }
+  .theme-toggle{
+    position:absolute;
+    top:20px; right:22px;
+    width:46px; height:46px;
+    border-radius:50%;
+    border:1.5px solid var(--line);
+    background:var(--card);
+    color:var(--ink);
+    font-size:1.2rem;
+    cursor:pointer;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    transition:transform .2s ease, background-color .25s ease, border-color .25s ease;
+  }
+  .theme-toggle:hover{ transform:rotate(18deg) scale(1.06); border-color:var(--terracotta); }
+  .theme-toggle:active{ transform:scale(0.92); }
+  .header-actions{
+    position:absolute;
+    top:20px; right:22px;
+    display:flex;
+    gap:10px;
+  }
+  .header-actions .theme-toggle{ position:static; }
+  .lang-row{
+    display:flex;
+    justify-content:flex-start;
+    gap:8px;
+    margin-bottom:14px;
+    flex-wrap:nowrap;
+    overflow-x:auto;
+    padding-bottom:6px;
+    scrollbar-width:thin;
+  }
+  .lang-row::-webkit-scrollbar{ height:5px; }
+  .lang-row::-webkit-scrollbar-thumb{ background:var(--line); border-radius:999px; }
+  .lang-btn{
+    border:1.5px solid var(--line);
+    background:transparent;
+    color:var(--muted);
+    padding:6px 14px;
+    border-radius:8px;
+    font-size:0.85rem;
+    cursor:pointer;
+    font-weight:500;
+    white-space:nowrap;
+    flex:0 0 auto;
+  }
+  .lang-btn.active{
+    border-color:var(--gold);
+    background:rgba(201,138,44,0.12);
+    color:var(--gold);
+    font-weight:700;
+  }
+
+  /* ---------- Progress bar ---------- */
+  .progress-wrap{
+    max-width:880px;
+    margin:0 auto 16px;
+    padding:0 20px;
+  }
+  .progress-track{
+    height:6px;
+    border-radius:999px;
+    background:var(--paper-2);
+    border:1px solid var(--line);
+    overflow:hidden;
+  }
+  .progress-fill{
+    height:100%;
+    width:0%;
+    background:linear-gradient(90deg, var(--terracotta), var(--gold), var(--teal));
+    transition:width .2s ease;
+  }
+
+  /* ---------- Controls bar ---------- */
+  .controls-wrap{
+    max-width:880px;
+    margin:28px auto 0;
+    padding:0 20px;
+  }
+  .controls{
+    display:flex;
+    flex-wrap:wrap;
+    gap:10px;
+    justify-content:center;
+    align-items:center;
+    margin-bottom:14px;
+  }
+  .time-btn{
+    border:1.5px solid var(--line);
+    background:var(--card);
+    color:var(--ink);
+    padding:8px 16px;
+    border-radius:999px;
+    font-family:'Hind Siliguri',sans-serif;
+    font-size:0.95rem;
+    cursor:pointer;
+    transition:all .15s ease;
+  }
+  .time-btn:hover{ border-color:var(--terracotta); }
+  .time-btn.active{
+    background:var(--terracotta);
+    border-color:var(--terracotta);
+    color:#fff7ee;
+    font-weight:600;
+  }
+  .mode-row{
+    display:flex;
+    justify-content:center;
+    gap:10px;
+    margin-bottom:6px;
+    flex-wrap:wrap;
+  }
+  .pill-toggle{
+    border:1.5px solid var(--line);
+    background:transparent;
+    color:var(--muted);
+    padding:6px 14px;
+    border-radius:999px;
+    font-size:0.85rem;
+    cursor:pointer;
+  }
+  .pill-toggle.active{
+    border-color:var(--teal);
+    color:var(--teal);
+    background:rgba(44,93,84,0.08);
+    font-weight:600;
+  }
+
+  .custom-box{
+    display:none;
+    max-width:880px;
+    margin:0 auto 14px;
+    padding:0 20px;
+  }
+  .custom-box.show{ display:block; }
+  .custom-box textarea{
+    width:100%;
+    min-height:90px;
+    border:1.5px solid var(--line);
+    border-radius:10px;
+    padding:12px 14px;
+    font-family:'Hind Siliguri',sans-serif;
+    font-size:1rem;
+    background:var(--card);
+    color:var(--ink);
+    resize:vertical;
+  }
+  .custom-actions{
+    display:flex;
+    gap:10px;
+    justify-content:flex-end;
+    margin-top:8px;
+  }
+  .small-btn{
+    border:1.5px solid var(--teal);
+    color:var(--teal);
+    background:transparent;
+    padding:6px 14px;
+    border-radius:8px;
+    font-size:0.88rem;
+    cursor:pointer;
+  }
+  .small-btn:hover{ background:rgba(44,93,84,0.08); }
+
+  /* ---------- Stat strip ---------- */
+  .stats{
+    max-width:880px;
+    margin:0 auto 18px;
+    padding:0 20px;
+    display:flex;
+    justify-content:center;
+    gap:36px;
+    flex-wrap:wrap;
+  }
+  .stat{
+    text-align:center;
+    min-width:90px;
+  }
+  .stat .num{
+    font-family:'JetBrains Mono', monospace;
+    font-size:2rem;
+    font-weight:700;
+    color:var(--terracotta-deep);
+    line-height:1;
+  }
+  .stat .lbl{
+    font-size:0.78rem;
+    color:var(--muted);
+    letter-spacing:0.04em;
+    margin-top:4px;
+  }
+  .stat.time .num{ color:var(--teal); }
+
+  /* ---------- Typing card ---------- */
+  .stage{
+    max-width:880px;
+    margin:0 auto;
+    padding:0 20px;
+  }
+  .type-card{
+    background:var(--card);
+    border:1.5px solid var(--line);
+    border-radius:16px;
+    padding:30px 28px;
+    box-shadow:0 10px 30px var(--shadow);
+    transition:background-color .25s ease, border-color .25s ease;
+    position:relative;
+    overflow:hidden;
+  }
+  .type-card::before{
+    content:"";
+    position:absolute;
+    top:0; left:0; bottom:0;
+    width:5px;
+    background:linear-gradient(180deg, var(--terracotta), var(--gold), var(--teal));
+  }
+  #textDisplay{
+    font-family:'Tiro Bangla','Hind Siliguri',serif;
+    font-size:1.55rem;
+    line-height:2.3;
+    letter-spacing:0.2px;
+    user-select:none;
+    word-break:break-word;
+    max-height:230px;
+    overflow-y:auto;
+    padding-right:4px;
+  }
+  #textDisplay span{ position:relative; }
+  #textDisplay.lang-en{ font-family:'Lora', serif; }
+  #textDisplay.lang-hi{ font-family:'Noto Sans Devanagari','Tiro Devanagari Hindi', serif; }
+  #textDisplay.lang-ur{ font-family:'Noto Nastaliq Urdu', serif; direction:rtl; text-align:right; line-height:2.6; }
+  #textDisplay.lang-ar{ font-family:'Noto Sans Arabic', serif; direction:rtl; text-align:right; }
+  #textDisplay.lang-ru{ font-family:'Noto Sans', sans-serif; }
+  #textDisplay.lang-fr{ font-family:'Lora', serif; }
+  #textDisplay.lang-es{ font-family:'Lora', serif; }
+  #textDisplay.lang-de{ font-family:'Noto Sans', sans-serif; }
+  #textDisplay.lang-tr{ font-family:'Noto Sans', sans-serif; }
+  #textDisplay.lang-it{ font-family:'Lora', serif; }
+  #textDisplay.lang-ms{ font-family:'Noto Sans', sans-serif; }
+  #textDisplay.lang-ja{ font-family:'Noto Sans JP', sans-serif; }
+  #textDisplay.lang-zh{ font-family:'Noto Sans SC', sans-serif; }
+  #textDisplay.lang-ko{ font-family:'Noto Sans KR', sans-serif; }
+  .char-pending{ color:#b6a989; }
+  .char-correct{ color:var(--good); }
+  .char-wrong{ color:var(--bad); background:rgba(187,68,48,0.14); border-radius:3px; }
+  .char-cursor{
+    border-left:2.5px solid var(--terracotta);
+    animation:blink 1s step-start infinite;
+  }
+  #textDisplay.lang-ur .char-cursor,
+  #textDisplay.lang-ar .char-cursor{
+    border-left:none;
+    border-right:2.5px solid var(--terracotta);
+  }
+  @keyframes blink{ 50%{ border-color:transparent; } }
+
+  #hiddenInput{
+    position:absolute;
+    opacity:0;
+    pointer-events:none;
+    height:0;width:0;
+  }
+  .type-overlay-hint{
+    margin-top:14px;
+    text-align:center;
+    color:var(--muted);
+    font-size:0.88rem;
+  }
+  .type-overlay-hint kbd{
+    background:var(--paper-2);
+    border:1px solid var(--line);
+    border-radius:5px;
+    padding:1px 7px;
+    font-family:'JetBrains Mono',monospace;
+  }
+
+  .action-row{
+    display:flex;
+    justify-content:center;
+    gap:12px;
+    margin-top:20px;
+  }
+  .restart-btn{
+    border:none;
+    background:var(--terracotta);
+    color:#fff7ee;
+    padding:10px 26px;
+    border-radius:10px;
+    font-family:'Hind Siliguri',sans-serif;
+    font-size:1rem;
+    font-weight:600;
+    cursor:pointer;
+    transition:transform .12s ease, background .15s ease;
+  }
+  .restart-btn:hover{ background:var(--terracotta-deep); transform:translateY(-1px); }
+
+  /* ---------- Result modal ---------- */
+  .overlay{
+    position:fixed; inset:0;
+    background:var(--overlay-bg);
+    display:none;
+    align-items:center;
+    justify-content:center;
+    padding:20px;
+    z-index:50;
+  }
+  .overlay.show{ display:flex; }
+  .result-card{
+    background:var(--card);
+    border-radius:18px;
+    padding:36px 32px;
+    max-width:560px;
+    width:100%;
+    text-align:center;
+    box-shadow:0 20px 60px rgba(0,0,0,0.3);
+    border-top:6px solid var(--terracotta);
+    max-height:88vh;
+    overflow-y:auto;
+  }
+  .result-card h2{
+    font-family:'Tiro Bangla',serif;
+    color:var(--terracotta-deep);
+    margin-top:0;
+    font-size:1.7rem;
+  }
+  .result-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:18px;
+    margin:22px 0;
+  }
+  .result-grid .rstat .num{
+    font-family:'JetBrains Mono',monospace;
+    font-size:2.1rem;
+    font-weight:700;
+    color:var(--teal);
+  }
+  .result-grid .rstat .lbl{
+    font-size:0.8rem;
+    color:var(--muted);
+    margin-top:2px;
+  }
+
+  .section-label{
+    text-align:left;
+    font-size:0.82rem;
+    color:var(--muted);
+    letter-spacing:0.04em;
+    margin:22px 0 8px;
+    font-weight:600;
+  }
+  .chart-box{
+    background:var(--paper-2);
+    border:1px solid var(--line);
+    border-radius:12px;
+    padding:10px;
+  }
+  #wpmChart{ width:100%; height:120px; display:block; }
+  .heatmap-box{
+    background:var(--paper-2);
+    border:1px solid var(--line);
+    border-radius:12px;
+    padding:14px;
+    display:flex;
+    flex-wrap:wrap;
+    gap:8px;
+    justify-content:center;
+    min-height:50px;
+  }
+  .heatmap-empty{
+    color:var(--muted);
+    font-size:0.85rem;
+    padding:6px;
+  }
+  .heat-tile{
+    min-width:38px;
+    height:38px;
+    padding:0 6px;
+    border-radius:8px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-family:'Tiro Bangla','Hind Siliguri',serif;
+    font-size:1.05rem;
+    font-weight:600;
+    color:#fff;
+    position:relative;
+  }
+  .heat-tile .heat-count{
+    position:absolute;
+    bottom:-7px;
+    right:-4px;
+    background:var(--bad);
+    color:#fff;
+    font-family:'JetBrains Mono',monospace;
+    font-size:0.6rem;
+    border-radius:999px;
+    padding:1px 5px;
+    border:1.5px solid var(--card);
+  }
+
+  footer{
+    text-align:center;
+    color:var(--muted);
+    font-size:0.82rem;
+    margin-top:50px;
+  }
+  footer .heart{ color:var(--terracotta); }
+
+  @media (max-width:560px){
+    #textDisplay{ font-size:1.3rem; line-height:2.1; max-height:180px; }
+    .type-card{ padding:18px 14px; }
+    .stats{ gap:16px; }
+    .stat .num{ font-size:1.5rem; }
+    header{ padding:64px 14px 14px; }
+    .brand-translit{ font-size:0.78rem; }
+    .header-actions{ top:14px; right:14px; gap:8px; }
+    .theme-toggle{ width:40px; height:40px; font-size:1.05rem; }
+    .tagline{ font-size:0.9rem; padding:0 6px; }
+    .controls-wrap{ padding:0 12px; }
+    .stage{ padding:0 12px; }
+    .progress-wrap{ padding:0 12px; }
+    .time-btn{ padding:7px 12px; font-size:0.85rem; }
+    .lang-btn{ padding:6px 12px; font-size:0.8rem; }
+    .result-card{ padding:24px 18px; max-width:94vw; }
+    .result-grid{ gap:12px; }
+    .result-grid .rstat .num{ font-size:1.6rem; }
+    .custom-actions{ flex-direction:column; align-items:stretch; gap:10px; }
+    .custom-actions .small-btn{ width:100%; }
+    .heat-tile{ min-width:32px; height:32px; font-size:0.92rem; }
+  }
+
+  @media (max-width:400px){
+    .brand{ font-size:1.9rem; }
+    #textDisplay{ font-size:1.15rem; line-height:1.95; }
+    .stats{ gap:10px; }
+    .stat .num{ font-size:1.25rem; }
+    .stat .lbl{ font-size:0.68rem; }
+  }
+
+  @media (min-width:561px) and (max-width:900px){
+    .stage, .controls-wrap, .progress-wrap{ padding:0 16px; }
+  }
+
+  /* RTL tweaks */
+  html[dir="rtl"] .header-actions{ left:22px; right:auto; }
+  html[dir="rtl"] .theme-toggle{ }
+  html[dir="rtl"] .progress-fill{ }
+  html[dir="rtl"] .heat-tile .heat-count{ right:auto; left:-4px; }
+  @media (max-width:560px){
+    html[dir="rtl"] .header-actions{ left:14px; right:auto; }
+  }
+</style>
+</head>
+<body>
+
+<div class="alpona"></div>
+
+<header>
+  <div class="header-actions">
+    <button class="theme-toggle" id="soundToggle" title="সাউন্ড অন/অফ" aria-label="Toggle sound">🔊</button>
+    <button class="theme-toggle" id="themeToggle" title="ডার্ক/লাইট মোড" aria-label="Toggle dark mode">🌙</button>
+  </div>
+  <div class="brand">অক্ষর<span>বেগ</span></div>
+  <div class="brand-translit">(Aksharbeg)</div>
+  <p class="tagline" id="taglineText">বাংলা টাইপিং স্পিড পরীক্ষা করুন — দ্রুত, নির্ভুল, ও নিজের গতিতে।</p>
+</header>
+
+<div class="controls-wrap">
+  <div class="lang-row" id="langRow">
+    <button class="lang-btn active" data-lang="bn">বাংলা</button>
+    <button class="lang-btn" data-lang="en">English</button>
+    <button class="lang-btn" data-lang="hi">हिंदी</button>
+    <button class="lang-btn" data-lang="ur">اردو</button>
+    <button class="lang-btn" data-lang="ar">العربية</button>
+    <button class="lang-btn" data-lang="ru">Русский</button>
+    <button class="lang-btn" data-lang="fr">Français</button>
+    <button class="lang-btn" data-lang="es">Español</button>
+    <button class="lang-btn" data-lang="de">Deutsch</button>
+    <button class="lang-btn" data-lang="tr">Türkçe</button>
+    <button class="lang-btn" data-lang="it">Italiano</button>
+    <button class="lang-btn" data-lang="ms">Melayu</button>
+    <button class="lang-btn" data-lang="ja">日本語</button>
+    <button class="lang-btn" data-lang="zh">中文</button>
+    <button class="lang-btn" data-lang="ko">한국어</button>
+  </div>
+
+  <div class="mode-row">
+    <button class="pill-toggle active" id="wordModeBtn">শব্দ অনুশীলন</button>
+    <button class="pill-toggle" id="customModeBtn">নিজের লেখা</button>
+  </div>
+
+  <div class="controls" id="timeControls">
+    <button class="time-btn" data-time="60" data-min="1">১ মিনিট</button>
+    <button class="time-btn" data-time="120" data-min="2">২ মিনিট</button>
+    <button class="time-btn active" data-time="180" data-min="3">৩ মিনিট</button>
+    <button class="time-btn" data-time="300" data-min="5">৫ মিনিট</button>
+    <button class="time-btn" data-time="600" data-min="10">১০ মিনিট</button>
+  </div>
+
+  <div class="custom-box" id="customBox">
+    <textarea id="customText" placeholder="এখানে আপনার নিজের বাংলা লেখা পেস্ট করুন..."></textarea>
+    <div class="custom-actions">
+      <label style="display:flex;align-items:center;gap:6px;color:var(--muted);font-size:0.88rem;">
+        <input type="checkbox" id="randomizeChk"> <span id="randomizeLabel">এলোমেলো করুন</span>
+      </label>
+      <button class="small-btn" id="useCustomBtn">এই লেখা দিয়ে শুরু করুন</button>
+    </div>
+  </div>
+</div>
+
+<div class="stats">
+  <div class="stat time">
+    <div class="num" id="timeLeft">৩:০০</div>
+    <div class="lbl" id="lblTime">সময়</div>
+  </div>
+  <div class="stat">
+    <div class="num" id="wpmStat">০</div>
+    <div class="lbl" id="lblWpm">WPM</div>
+  </div>
+  <div class="stat">
+    <div class="num" id="accStat">১০০%</div>
+    <div class="lbl" id="lblAcc">নির্ভুলতা</div>
+  </div>
+  <div class="stat">
+    <div class="num" id="errStat">০</div>
+    <div class="lbl" id="lblErr">ভুল</div>
+  </div>
+</div>
+
+<div class="progress-wrap">
+  <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
+</div>
+
+<div class="stage">
+  <div class="type-card" id="typeCard">
+    <div id="textDisplay"></div>
+    <input id="hiddenInput" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false">
+  </div>
+  <p class="type-overlay-hint" id="typeHint">লেখা শুরু করতে এখানে ক্লিক করুন এবং টাইপ করুন। নতুন করে শুরু করতে <kbd>Tab</kbd> বা নিচের বাটনে ক্লিক করুন।</p>
+  <div class="action-row">
+    <button class="restart-btn" id="restartBtn">নতুন করে শুরু করুন</button>
+  </div>
+</div>
+
+<footer>
+  <p id="footerText">অক্ষরবেগ-এ বাংলায় টাইপ করুন <span class="heart">♥</span> ১,০০০+ প্রচলিত বাংলা শব্দ থেকে তৈরি অনুশীলন</p>
+</footer>
+
+<div class="overlay" id="resultOverlay">
+  <div class="result-card">
+    <h2 id="resultTitle">ফলাফল</h2>
+    <div class="result-grid">
+      <div class="rstat"><div class="num" id="rWpm">০</div><div class="lbl" id="rWpmLbl">শব্দ/মিনিট (WPM)</div></div>
+      <div class="rstat"><div class="num" id="rAcc">০%</div><div class="lbl" id="rAccLbl">নির্ভুলতা</div></div>
+      <div class="rstat"><div class="num" id="rChars">০</div><div class="lbl" id="rCharsLbl">মোট অক্ষর</div></div>
+      <div class="rstat"><div class="num" id="rErr">০</div><div class="lbl" id="rErrLbl">ভুল সংখ্যা</div></div>
+    </div>
+
+    <div class="section-label" id="chartLabel">WPM ট্রেন্ড</div>
+    <div class="chart-box"><canvas id="wpmChart"></canvas></div>
+
+    <div class="section-label" id="heatmapLabel">ভুল হিটম্যাপ — কোন অক্ষরে বেশি ভুল হচ্ছে</div>
+    <div class="heatmap-box" id="heatmapBox"></div>
+
+    <button class="restart-btn" id="tryAgainBtn" style="margin-top:22px;">আবার চেষ্টা করুন</button>
+  </div>
+</div>
+
+<script>
+(function(){
+  const WORD_BANK_BN = [
+"আমি","তুমি","সে","আমরা","তোমরা","তারা","এই","সেই","ওই","কোন","কি","কেন","কখন","কোথায়","কীভাবে",
+"মানুষ","দেশ","শহর","গ্রাম","নদী","পাহাড়","সমুদ্র","আকাশ","বাতাস","সূর্য","চাঁদ","তারা","পৃথিবী","বাংলাদেশ","ঢাকা",
+"ভাষা","বাংলা","ইংরেজি","লেখা","পড়া","বই","কলম","কাগজ","শব্দ","বাক্য","গল্প","কবিতা","গান","সংগীত","শিল্প",
+"স্কুল","কলেজ","বিশ্ববিদ্যালয়","শিক্ষক","ছাত্র","ছাত্রী","পরীক্ষা","ফলাফল","জ্ঞান","শিক্ষা","বিজ্ঞান","গণিত","ইতিহাস","ভূগোল","দর্শন",
+"পরিবার","মা","বাবা","ভাই","বোন","ছেলে","মেয়ে","সন্তান","স্বামী","স্ত্রী","বন্ধু","প্রতিবেশী","আত্মীয়","সমাজ","দেশবাসী",
+"কাজ","চাকরি","ব্যবসা","অর্থ","টাকা","বাজার","দোকান","পণ্য","ক্রয়","বিক্রয়","মূল্য","লাভ","ক্ষতি","ব্যাংক","ঋণ",
+"সরকার","রাজনীতি","নির্বাচন","মন্ত্রী","সংসদ","আইন","অধিকার","কর্তব্য","স্বাধীনতা","সংবিধান","প্রশাসন","নীতি","বাজেট","কর","উন্নয়ন",
+"স্বাস্থ্য","চিকিৎসা","হাসপাতাল","ডাক্তার","নার্স","ওষুধ","রোগ","চিকিৎসক","ব্যায়াম","পুষ্টি","খাদ্য","পানি","ঘুম","বিশ্রাম","সুস্থতা",
+"প্রকৃতি","গাছ","ফুল","ফল","পাখি","প্রাণী","মাছ","বন","জঙ্গল","বৃষ্টি","শীত","গ্রীষ্ম","বর্ষা","শরৎ","বসন্ত",
+"সময়","দিন","রাত","সকাল","দুপুর","বিকাল","সন্ধ্যা","সপ্তাহ","মাস","বছর","ঘণ্টা","মিনিট","সেকেন্ড","আজ","আগামীকাল",
+"খাবার","ভাত","মাছ","মাংস","সবজি","ফল","দুধ","চা","কফি","মিষ্টি","রান্না","খাওয়া","পান","রেস্তোরাঁ","হোটেল",
+"যাতায়াত","গাড়ি","বাস","ট্রেন","বিমান","নৌকা","রাস্তা","সড়ক","ভ্রমণ","যাত্রা","পথ","গন্তব্য","স্টেশন","বিমানবন্দর","টিকিট",
+"প্রযুক্তি","কম্পিউটার","ইন্টারনেট","মোবাইল","ফোন","সফটওয়্যার","তথ্য","যোগাযোগ","নেটওয়ার্ক","ওয়েবসাইট","অ্যাপ","ডিজিটাল","প্রোগ্রাম","ডেটা","নিরাপত্তা",
+"খেলা","ক্রিকেট","ফুটবল","খেলোয়াড়","দল","মাঠ","প্রতিযোগিতা","জয়","পরাজয়","পুরস্কার","চ্যাম্পিয়ন","অনুশীলন","শক্তি","গতি","দক্ষতা",
+"সংস্কৃতি","উৎসব","ঈদ","পূজা","পহেলা","বৈশাখ","নববর্ষ","ঐতিহ্য","পোশাক","শাড়ি","পঞ্জিকা","রীতি","আনন্দ","মিলন","স্মৃতি",
+"ভালোবাসা","বিশ্বাস","সম্মান","সততা","সাহস","ধৈর্য","পরিশ্রম","সাফল্য","স্বপ্ন","ইচ্ছা","আশা","চেষ্টা","অনুভূতি","অভিজ্ঞতা","জীবন"
+  ];
+
+  const WORD_BANK_EN = [
+"the","be","to","of","and","a","in","that","have","it","for","not","on","with","he",
+"as","you","do","at","this","but","his","by","from","they","we","say","her","she","or",
+"an","will","my","one","all","would","there","their","what","so","up","out","if","about","who",
+"get","which","go","me","when","make","can","like","time","no","just","him","know","take","people",
+"into","year","your","good","some","could","them","see","other","than","then","now","look","only","come",
+"its","over","think","also","back","after","use","two","how","our","work","first","well","way","even",
+"new","want","because","any","these","give","day","most","us","language","computer","keyboard","speed","practice","accuracy",
+"science","nature","music","family","friend","school","student","teacher","city","country","river","mountain","ocean","sky","wind",
+"morning","evening","night","week","month","today","tomorrow","yesterday","food","water","health","exercise","journey","travel","road",
+"technology","internet","mobile","software","data","network","website","program","digital","security","game","football","cricket","player","team",
+"culture","festival","tradition","clothes","memory","love","trust","respect","honesty","courage","patience","effort","success","dream","hope"
+  ];
+
+  const WORD_BANK_HI = [
+"मैं","तुम","वह","हम","तुम सब","वे","यह","वो","कौन","क्या","क्यों","कब","कहाँ","कैसे","आज",
+"लोग","देश","शहर","गाँव","नदी","पहाड़","समुद्र","आकाश","हवा","सूरज","चाँद","सितारे","पृथ्वी","भारत","दिल्ली",
+"भाषा","हिंदी","अंग्रेज़ी","लिखना","पढ़ना","किताब","कलम","कागज़","शब्द","वाक्य","कहानी","कविता","गीत","संगीत","कला",
+"स्कूल","कॉलेज","विश्वविद्यालय","शिक्षक","छात्र","छात्रा","परीक्षा","परिणाम","ज्ञान","शिक्षा","विज्ञान","गणित","इतिहास","भूगोल","दर्शन",
+"परिवार","माँ","पिता","भाई","बहन","बेटा","बेटी","दोस्त","पड़ोसी","समाज","रिश्तेदार","पति","पत्नी","बच्चे","सहयोगी",
+"काम","नौकरी","व्यापार","पैसा","रुपया","बाज़ार","दुकान","सामान","खरीद","बिक्री","कीमत","लाभ","हानि","बैंक","ऋण",
+"सरकार","राजनीति","चुनाव","मंत्री","संसद","कानून","अधिकार","कर्तव्य","स्वतंत्रता","संविधान","प्रशासन","नीति","बजट","कर","विकास",
+"स्वास्थ्य","इलाज","अस्पताल","डॉक्टर","नर्स","दवा","बीमारी","व्यायाम","पोषण","भोजन","पानी","नींद","आराम","सेहत","योग",
+"प्रकृति","पेड़","फूल","फल","पक्षी","जानवर","मछली","जंगल","बारिश","सर्दी","गर्मी","बरसात","मौसम","धूप","बर्फ",
+"समय","दिन","रात","सुबह","दोपहर","शाम","सप्ताह","महीना","साल","घंटा","मिनट","सेकंड","कल","परसों","अभी",
+"खाना","चावल","सब्ज़ी","दूध","चाय","कॉफ़ी","मिठाई","खाना बनाना","रेस्तरां","होटल","भोजन","नाश्ता","दोपहर का खाना","रात का खाना","स्वाद",
+"यात्रा","गाड़ी","बस","ट्रेन","हवाई जहाज़","नाव","सड़क","रास्ता","मंज़िल","स्टेशन","हवाई अड्डा","टिकट","सफ़र","पर्यटन","दूरी",
+"तकनीक","कंप्यूटर","इंटरनेट","मोबाइल","फ़ोन","सॉफ़्टवेयर","जानकारी","संचार","नेटवर्क","वेबसाइट","ऐप","डिजिटल","कार्यक्रम","डेटा","सुरक्षा",
+"खेल","क्रिकेट","फुटबॉल","खिलाड़ी","टीम","मैदान","प्रतियोगिता","जीत","हार","पुरस्कार","चैंपियन","अभ्यास","ताकत","गति","कौशल",
+"संस्कृति","त्योहार","दिवाली","होली","ईद","परंपरा","पोशाक","साड़ी","रीति","खुशी","मिलन","यादें","विश्वास","प्रेम","सम्मान"
+  ];
+
+  const WORD_BANK_UR = [
+"میں","تم","وہ","ہم","تم سب","وہ سب","یہ","کیا","کون","کیوں","کب","کہاں","کیسے","لوگ","ملک",
+"شہر","گاؤں","دریا","پہاڑ","سمندر","آسمان","ہوا","سورج","چاند","ستارے","زمین","پاکستان","کراچی","زبان","اردو",
+"انگریزی","لکھنا","پڑھنا","کتاب","قلم","کاغذ","لفظ","جملہ","کہانی","نظم","گانا","موسیقی","فن","اسکول","کالج",
+"یونیورسٹی","استاد","طالب علم","امتحان","نتیجہ","علم","تعلیم","سائنس","ریاضی","تاریخ","جغرافیہ","فلسفہ","خاندان","ماں","باپ",
+"بھائی","بہن","بیٹا","بیٹی","دوست","پڑوسی","معاشرہ","رشتہ دار","شوہر","بیوی","بچے","کام","نوکری","کاروبار","پیسہ",
+"روپیہ","بازار","دکان","سامان","خریداری","فروخت","قیمت","نفع","نقصان","بینک","قرض","حکومت","سیاست","انتخابات","وزیر",
+"پارلیمنٹ","قانون","حقوق","فرض","آزادی","آئین","انتظامیہ","پالیسی","بجٹ","ٹیکس","ترقی"
+  ];
+
+  const WORD_BANK_AR = [
+"أنا","أنت","هو","هي","نحن","أنتم","هم","هذا","ذلك","ماذا","من","لماذا","متى","أين","كيف",
+"الناس","البلد","المدينة","القرية","النهر","الجبل","البحر","السماء","الريح","الشمس","القمر","النجوم","الأرض","مصر","القاهرة",
+"اللغة","العربية","الإنجليزية","الكتابة","القراءة","كتاب","قلم","ورقة","كلمة","جملة","قصة","قصيدة","أغنية","موسيقى","فن",
+"مدرسة","جامعة","معلم","طالب","امتحان","نتيجة","معرفة","تعليم","علم","رياضيات","تاريخ","جغرافيا","فلسفة","عائلة","أم",
+"أب","أخ","أخت","ابن","ابنة","صديق","جار","مجتمع","عمل","مال","سوق","متجر","منتج","شراء","بيع",
+"سعر","ربح","خسارة","بنك","حكومة","سياسة","انتخابات","وزير","قانون","حقوق","حرية"
+  ];
+
+  const WORD_BANK_RU = [
+"я","ты","он","она","мы","вы","они","это","что","кто","почему","когда","где","как","люди",
+"страна","город","деревня","река","гора","море","небо","ветер","солнце","луна","звезды","земля","россия","москва","язык",
+"русский","английский","писать","читать","книга","ручка","бумага","слово","предложение","рассказ","стихи","песня","музыка","искусство","школа",
+"университет","учитель","студент","экзамен","результат","знание","образование","наука","математика","история","география","философия","семья","мама","папа",
+"брат","сестра","сын","дочь","друг","сосед","общество","работа","бизнес","деньги","рынок","магазин","товар","покупка","продажа",
+"цена","прибыль","убыток","банк","кредит","правительство","политика","выборы","министр","закон","права","свобода"
+  ];
+
+  const WORD_BANK_FR = [
+"je","tu","il","elle","nous","vous","ils","ce","que","qui","pourquoi","quand","où","comment","gens",
+"pays","ville","village","rivière","montagne","mer","ciel","vent","soleil","lune","étoiles","terre","france","paris","langue",
+"français","anglais","écrire","lire","livre","stylo","papier","mot","phrase","histoire","poème","chanson","musique","art","école",
+"université","professeur","étudiant","examen","résultat","connaissance","éducation","science","mathématiques","géographie","philosophie","famille","mère","père","frère",
+"sœur","fils","fille","ami","voisin","société","travail","argent","marché","magasin","produit","achat","vente","prix","profit",
+"perte","banque","gouvernement","politique","élection","ministre","loi","droits","liberté"
+  ];
+
+  const WORD_BANK_ES = [
+"yo","tú","él","ella","nosotros","vosotros","ellos","esto","eso","qué","quién","por qué","cuándo","dónde","cómo",
+"gente","país","ciudad","pueblo","río","montaña","mar","cielo","viento","sol","luna","estrellas","tierra","españa","madrid",
+"idioma","español","inglés","escribir","leer","libro","bolígrafo","papel","palabra","oración","historia","poema","canción","música","arte",
+"escuela","universidad","profesor","estudiante","examen","resultado","conocimiento","educación","ciencia","matemáticas","geografía","filosofía","familia","madre","padre",
+"hermano","hermana","hijo","hija","amigo","vecino","sociedad","trabajo","dinero","mercado","tienda","producto","compra","venta","precio",
+"ganancia","pérdida","banco","gobierno","política","elección","ministro","ley","derechos","libertad"
+  ];
+
+  const WORD_BANK_DE = [
+"ich","du","er","sie","wir","ihr","sie","das","dies","was","wer","warum","wann","wo","wie",
+"menschen","land","stadt","dorf","fluss","berg","meer","himmel","wind","sonne","mond","sterne","erde","deutschland","berlin",
+"sprache","deutsch","englisch","schreiben","lesen","buch","stift","papier","wort","satz","geschichte","gedicht","lied","musik","kunst",
+"schule","universität","lehrer","student","prüfung","ergebnis","wissen","bildung","wissenschaft","mathematik","geographie","philosophie","familie","mutter","vater",
+"bruder","schwester","sohn","tochter","freund","nachbar","gesellschaft","arbeit","geld","markt","geschäft","produkt","kauf","verkauf","preis",
+"gewinn","verlust","bank","regierung","politik","wahl","minister","gesetz","rechte","freiheit"
+  ];
+
+  const WORD_BANK_TR = [
+"ben","sen","o","biz","siz","onlar","bu","şu","ne","kim","neden","ne zaman","nerede","nasıl","insanlar",
+"ülke","şehir","köy","nehir","dağ","deniz","gökyüzü","rüzgar","güneş","ay","yıldızlar","dünya","türkiye","ankara","dil",
+"türkçe","ingilizce","yazmak","okumak","kitap","kalem","kağıt","kelime","cümle","hikaye","şiir","şarkı","müzik","sanat","okul",
+"üniversite","öğretmen","öğrenci","sınav","sonuç","bilgi","eğitim","bilim","matematik","tarih","coğrafya","felsefe","aile","anne","baba",
+"kardeş","oğul","kız","arkadaş","komşu","toplum","iş","para","pazar","dükkan","ürün","alışveriş","satış","fiyat","kar",
+"zarar","banka","hükümet","siyaset","seçim","bakan","kanun","haklar","özgürlük"
+  ];
+
+  const WORD_BANK_IT = [
+"io","tu","lui","lei","noi","voi","loro","questo","quello","cosa","chi","perché","quando","dove","come",
+"persone","paese","città","villaggio","fiume","montagna","mare","cielo","vento","sole","luna","stelle","terra","italia","roma",
+"lingua","italiano","inglese","scrivere","leggere","libro","penna","carta","parola","frase","storia","poesia","canzone","musica","arte",
+"scuola","università","insegnante","studente","esame","risultato","conoscenza","educazione","scienza","matematica","geografia","filosofia","famiglia","madre","padre",
+"fratello","sorella","figlio","figlia","amico","vicino","società","lavoro","denaro","mercato","negozio","prodotto","acquisto","vendita","prezzo",
+"profitto","perdita","banca","governo","politica","elezione","ministro","legge","diritti","libertà"
+  ];
+
+  const WORD_BANK_MS = [
+"saya","kamu","dia","kami","kamu semua","mereka","ini","itu","apa","siapa","mengapa","bila","di mana","bagaimana","orang",
+"negara","bandar","kampung","sungai","gunung","laut","langit","angin","matahari","bulan","bintang","bumi","malaysia","kuala lumpur","bahasa",
+"melayu","inggeris","menulis","membaca","buku","pen","kertas","perkataan","ayat","cerita","puisi","lagu","muzik","seni","sekolah",
+"universiti","guru","pelajar","peperiksaan","keputusan","pengetahuan","pendidikan","sains","matematik","sejarah","geografi","falsafah","keluarga","ibu","bapa",
+"abang","kakak","anak lelaki","anak perempuan","kawan","jiran","masyarakat","kerja","wang","pasar","kedai","barangan","belian","jualan","harga",
+"untung","rugi","bank","kerajaan","politik","pilihan raya","menteri","undang-undang","hak","kebebasan"
+  ];
+
+  const WORD_BANK_JA = [
+"私","あなた","彼","彼女","私たち","あなたたち","彼ら","これ","それ","何","誰","なぜ","いつ","どこ","どう",
+"人々","国","都市","村","川","山","海","空","風","太陽","月","星","地球","日本","東京",
+"言語","日本語","英語","書く","読む","本","ペン","紙","言葉","文章","物語","詩","歌","音楽","芸術",
+"学校","大学","先生","学生","試験","結果","知識","教育","科学","数学","歴史","地理","哲学","家族","母",
+"父","兄弟","姉妹","息子","娘","友達","隣人","社会","仕事","お金","市場","店","商品","購入","販売",
+"価格","利益","損失","銀行","政府","政治","選挙","大臣","法律","権利","自由"
+  ];
+
+  const WORD_BANK_ZH = [
+"我","你","他","她","我们","你们","他们","这","那","什么","谁","为什么","什么时候","哪里","怎么",
+"人们","国家","城市","村庄","河流","山","海","天空","风","太阳","月亮","星星","地球","中国","北京",
+"语言","中文","英语","写","读","书","笔","纸","词","句子","故事","诗歌","歌曲","音乐","艺术",
+"学校","大学","老师","学生","考试","结果","知识","教育","科学","数学","历史","地理","哲学","家庭","母亲",
+"父亲","兄弟","姐妹","儿子","女儿","朋友","邻居","社会","工作","钱","市场","商店","商品","购买","销售",
+"价格","利润","损失","银行","政府","政治","选举","部长","法律","权利","自由"
+  ];
+
+  const WORD_BANK_KO = [
+"나","너","그","그녀","우리","너희","그들","이것","저것","무엇","누구","왜","언제","어디","어떻게",
+"사람들","나라","도시","마을","강","산","바다","하늘","바람","태양","달","별","지구","한국","서울",
+"언어","한국어","영어","쓰다","읽다","책","펜","종이","단어","문장","이야기","시","노래","음악","예술",
+"학교","대학교","선생님","학생","시험","결과","지식","교육","과학","수학","역사","지리","철학","가족","어머니",
+"아버지","형제","자매","아들","딸","친구","이웃","사회","일","돈","시장","가게","상품","구매","판매",
+"가격","이익","손실","은행","정부","정치","선거","장관","법","권리","자유"
+  ];
+
+  const WORD_BANKS = {
+    bn: WORD_BANK_BN, en: WORD_BANK_EN, hi: WORD_BANK_HI,
+    ur: WORD_BANK_UR, ar: WORD_BANK_AR, ru: WORD_BANK_RU,
+    fr: WORD_BANK_FR, es: WORD_BANK_ES, de: WORD_BANK_DE,
+    tr: WORD_BANK_TR, it: WORD_BANK_IT, ms: WORD_BANK_MS,
+    ja: WORD_BANK_JA, zh: WORD_BANK_ZH, ko: WORD_BANK_KO,
+  };
+
+  const STRINGS = {
+    bn: { tagline: "বাংলা টাইপিং স্পিড পরীক্ষা করুন — দ্রুত, নির্ভুল, ও নিজের গতিতে।", customPlaceholder: "এখানে আপনার নিজের বাংলা লেখা পেস্ট করুন...", wordMode: "শব্দ অনুশীলন", customMode: "নিজের লেখা", randomizeLabel: "এলোমেলো করুন", useCustomBtn: "এই লেখা দিয়ে শুরু করুন", lblTime: "সময়", lblWpm: "WPM", lblAcc: "নির্ভুলতা", lblErr: "ভুল", minuteUnit: "মিনিট", hintHtml: "লেখা শুরু করতে এখানে ক্লিক করুন এবং টাইপ করুন। নতুন করে শুরু করতে <kbd>Tab</kbd> বা নিচের বাটনে ক্লিক করুন।", restart: "নতুন করে শুরু করুন", footer: "অক্ষরবেগ-এ টাইপ করুন <span class=\"heart\">♥</span> ১,৫০০+ প্রচলিত শব্দ থেকে তৈরি অনুশীলন", resultTitle: "ফলাফল", rWpmLbl: "শব্দ/মিনিট (WPM)", rAccLbl: "নির্ভুলতা", rCharsLbl: "মোট অক্ষর", rErrLbl: "ভুল সংখ্যা", chartLabel: "WPM ট্রেন্ড", heatmapLabel: "ভুল হিটম্যাপ — কোন অক্ষরে বেশি ভুল হচ্ছে", heatmapEmpty: "কোনো ভুল হয়নি — চমৎকার নির্ভুলতা!", tryAgain: "আবার চেষ্টা করুন", noTextAlert: "অনুগ্রহ করে কিছু লেখা লিখুন বা পেস্ট করুন।", soundTitle: "সাউন্ড অন/অফ", themeTitle: "ডার্ক/লাইট মোড" },
+    en: { tagline: "Test your English typing speed — fast, accurate, at your own pace.", customPlaceholder: "Paste your own English text here...", wordMode: "Word Practice", customMode: "Custom Text", randomizeLabel: "Randomize", useCustomBtn: "Start with this text", lblTime: "Time", lblWpm: "WPM", lblAcc: "Accuracy", lblErr: "Errors", minuteUnit: "Min", hintHtml: "Click here to start typing. Press <kbd>Tab</kbd> or the button below to restart.", restart: "Restart", footer: "Type in AkkhorBeg <span class=\"heart\">♥</span> practice built from 1,500+ common words", resultTitle: "Results", rWpmLbl: "Words/Min (WPM)", rAccLbl: "Accuracy", rCharsLbl: "Total Characters", rErrLbl: "Errors", chartLabel: "WPM Trend", heatmapLabel: "Error Heatmap — which keys you miss most", heatmapEmpty: "No mistakes — excellent accuracy!", tryAgain: "Try Again", noTextAlert: "Please write or paste some text.", soundTitle: "Toggle sound", themeTitle: "Toggle dark / light mode" },
+    hi: { tagline: "अपनी हिंदी टाइपिंग स्पीड जांचें — तेज़, सटीक, अपनी रफ़्तार में।", customPlaceholder: "अपना हिंदी टेक्स्ट यहाँ पेस्ट करें...", wordMode: "शब्द अभ्यास", customMode: "अपना टेक्स्ट", randomizeLabel: "बेतरतीब करें", useCustomBtn: "इस टेक्स्ट से शुरू करें", lblTime: "समय", lblWpm: "WPM", lblAcc: "सटीकता", lblErr: "गलतियाँ", minuteUnit: "मिनट", hintHtml: "टाइप करना शुरू करने के लिए यहाँ क्लिक करें। फिर से शुरू करने के लिए <kbd>Tab</kbd> या नीचे बटन दबाएँ।", restart: "फिर से शुरू करें", footer: "अक्षरबेग में टाइप करें <span class=\"heart\">♥</span> 1,500+ आम शब्दों से बना अभ्यास", resultTitle: "परिणाम", rWpmLbl: "शब्द/मिनट (WPM)", rAccLbl: "सटीकता", rCharsLbl: "कुल अक्षर", rErrLbl: "गलतियाँ", chartLabel: "WPM ट्रेंड", heatmapLabel: "त्रुटि हीटमैप — किन अक्षरों में सबसे ज़्यादा गलती", heatmapEmpty: "कोई गलती नहीं — शानदार सटीकता!", tryAgain: "फिर से कोशिश करें", noTextAlert: "कृपया कुछ टेक्स्ट लिखें या पेस्ट करें।", soundTitle: "ध्वनि चालू/बंद", themeTitle: "डार्क/लाइट मोड बदलें" },
+    ur: { tagline: "اپنی اردو ٹائپنگ کی رفتار جانچیں — تیز، درست، اپنی رفتار سے۔", customPlaceholder: "اپنا اردو متن یہاں پیسٹ کریں...", wordMode: "الفاظ کی مشق", customMode: "اپنا متن", randomizeLabel: "بے ترتیب کریں", useCustomBtn: "اس متن سے شروع کریں", lblTime: "وقت", lblWpm: "WPM", lblAcc: "درستگی", lblErr: "غلطیاں", minuteUnit: "منٹ", hintHtml: "ٹائپ کرنا شروع کرنے کے لیے یہاں کلک کریں۔ دوبارہ شروع کرنے کے لیے <kbd>Tab</kbd> یا نیچے بٹن دبائیں۔", restart: "دوبارہ شروع کریں", footer: "اخّربیگ میں ٹائپ کریں <span class=\"heart\">♥</span> 1500+ عام الفاظ سے بنائی گئی مشق", resultTitle: "نتیجہ", rWpmLbl: "الفاظ/منٹ (WPM)", rAccLbl: "درستگی", rCharsLbl: "کل حروف", rErrLbl: "غلطیوں کی تعداد", chartLabel: "WPM رجحان", heatmapLabel: "غلطی ہیٹ میپ — کس حرف میں سب سے زیادہ غلطی", heatmapEmpty: "کوئی غلطی نہیں — بہترین درستگی!", tryAgain: "دوبارہ کوشش کریں", noTextAlert: "براہ کرم کچھ متن لکھیں یا پیسٹ کریں۔", soundTitle: "آواز آن/آف", themeTitle: "ڈارک/لائٹ موڈ تبدیل کریں" },
+    ar: { tagline: "اختبر سرعة الكتابة بالعربية — سريع، دقيق، وبوتيرتك الخاصة.", customPlaceholder: "الصق نصك العربي هنا...", wordMode: "تدريب الكلمات", customMode: "نص مخصص", randomizeLabel: "عشوائي", useCustomBtn: "ابدأ بهذا النص", lblTime: "الوقت", lblWpm: "WPM", lblAcc: "الدقة", lblErr: "الأخطاء", minuteUnit: "دقيقة", hintHtml: "انقر هنا لبدء الكتابة. اضغط <kbd>Tab</kbd> أو الزر أدناه لإعادة البدء.", restart: "إعادة البدء", footer: "اكتب في أخّربيگ <span class=\"heart\">♥</span> تدريب مبني على أكثر من 1500 كلمة شائعة", resultTitle: "النتيجة", rWpmLbl: "كلمة/دقيقة (WPM)", rAccLbl: "الدقة", rCharsLbl: "إجمالي الأحرف", rErrLbl: "عدد الأخطاء", chartLabel: "اتجاه WPM", heatmapLabel: "خريطة الأخطاء — أكثر الحروف خطأً", heatmapEmpty: "لا توجد أخطاء — دقة ممتازة!", tryAgain: "حاول مرة أخرى", noTextAlert: "الرجاء كتابة أو لصق بعض النص.", soundTitle: "تبديل الصوت", themeTitle: "تبديل الوضع الداكن/الفاتح" },
+    ru: { tagline: "Проверьте скорость печати на русском — быстро и точно.", customPlaceholder: "Вставьте свой текст на русском здесь...", wordMode: "Практика слов", customMode: "Свой текст", randomizeLabel: "Перемешать", useCustomBtn: "Начать с этого текста", lblTime: "Время", lblWpm: "WPM", lblAcc: "Точность", lblErr: "Ошибки", minuteUnit: "мин", hintHtml: "Нажмите здесь, чтобы начать печатать. Нажмите <kbd>Tab</kbd> или кнопку ниже для перезапуска.", restart: "Начать заново", footer: "Печатайте в AkkhorBeg <span class=\"heart\">♥</span> практика из 1500+ распространённых слов", resultTitle: "Результат", rWpmLbl: "Слов/мин (WPM)", rAccLbl: "Точность", rCharsLbl: "Всего символов", rErrLbl: "Ошибок", chartLabel: "Динамика WPM", heatmapLabel: "Тепловая карта ошибок — какие буквы чаще всего неверны", heatmapEmpty: "Ошибок нет — отличная точность!", tryAgain: "Попробовать снова", noTextAlert: "Пожалуйста, напишите или вставьте текст.", soundTitle: "Звук вкл/выкл", themeTitle: "Тёмная/светлая тема" },
+    fr: { tagline: "Testez votre vitesse de frappe en français — rapide et précis.", customPlaceholder: "Collez votre texte français ici...", wordMode: "Pratique de mots", customMode: "Texte personnalisé", randomizeLabel: "Aléatoire", useCustomBtn: "Commencer avec ce texte", lblTime: "Temps", lblWpm: "WPM", lblAcc: "Précision", lblErr: "Erreurs", minuteUnit: "min", hintHtml: "Cliquez ici pour commencer à taper. Appuyez sur <kbd>Tab</kbd> ou le bouton ci-dessous pour recommencer.", restart: "Recommencer", footer: "Tapez sur AkkhorBeg <span class=\"heart\">♥</span> entraînement basé sur 1500+ mots courants", resultTitle: "Résultat", rWpmLbl: "Mots/min (WPM)", rAccLbl: "Précision", rCharsLbl: "Caractères totaux", rErrLbl: "Erreurs", chartLabel: "Tendance WPM", heatmapLabel: "Carte de chaleur des erreurs — lettres les plus ratées", heatmapEmpty: "Aucune erreur — excellente précision !", tryAgain: "Réessayer", noTextAlert: "Veuillez écrire ou coller du texte.", soundTitle: "Activer/désactiver le son", themeTitle: "Basculer mode sombre/clair" },
+    es: { tagline: "Pon a prueba tu velocidad de escritura en español.", customPlaceholder: "Pega aquí tu propio texto en español...", wordMode: "Práctica de palabras", customMode: "Texto personalizado", randomizeLabel: "Aleatorizar", useCustomBtn: "Empezar con este texto", lblTime: "Tiempo", lblWpm: "WPM", lblAcc: "Precisión", lblErr: "Errores", minuteUnit: "min", hintHtml: "Haz clic aquí para empezar a escribir. Pulsa <kbd>Tab</kbd> o el botón de abajo para reiniciar.", restart: "Reiniciar", footer: "Escribe en AkkhorBeg <span class=\"heart\">♥</span> práctica creada con más de 1500 palabras comunes", resultTitle: "Resultado", rWpmLbl: "Palabras/min (WPM)", rAccLbl: "Precisión", rCharsLbl: "Caracteres totales", rErrLbl: "Errores", chartLabel: "Tendencia de WPM", heatmapLabel: "Mapa de calor de errores — letras donde más fallas", heatmapEmpty: "Sin errores — ¡excelente precisión!", tryAgain: "Intentar de nuevo", noTextAlert: "Por favor escribe o pega algo de texto.", soundTitle: "Activar/desactivar sonido", themeTitle: "Cambiar modo oscuro/claro" },
+    de: { tagline: "Teste deine Tippgeschwindigkeit auf Deutsch — schnell und genau.", customPlaceholder: "Füge hier deinen deutschen Text ein...", wordMode: "Wortübung", customMode: "Eigener Text", randomizeLabel: "Zufällig mischen", useCustomBtn: "Mit diesem Text starten", lblTime: "Zeit", lblWpm: "WPM", lblAcc: "Genauigkeit", lblErr: "Fehler", minuteUnit: "Min", hintHtml: "Klicke hier, um mit dem Tippen zu beginnen. Drücke <kbd>Tab</kbd> oder den Button unten zum Neustart.", restart: "Neu starten", footer: "Tippe in AkkhorBeg <span class=\"heart\">♥</span> Übung aus über 1500 gängigen Wörtern", resultTitle: "Ergebnis", rWpmLbl: "Wörter/Min (WPM)", rAccLbl: "Genauigkeit", rCharsLbl: "Zeichen gesamt", rErrLbl: "Fehler", chartLabel: "WPM-Verlauf", heatmapLabel: "Fehler-Heatmap — welche Buchstaben am meisten falsch sind", heatmapEmpty: "Keine Fehler — ausgezeichnete Genauigkeit!", tryAgain: "Erneut versuchen", noTextAlert: "Bitte schreibe oder füge etwas Text ein.", soundTitle: "Ton ein/aus", themeTitle: "Dunkel-/Hellmodus umschalten" },
+    tr: { tagline: "Türkçe yazma hızınızı test edin — hızlı ve doğru.", customPlaceholder: "Kendi Türkçe metninizi buraya yapıştırın...", wordMode: "Kelime Alıştırması", customMode: "Özel Metin", randomizeLabel: "Karıştır", useCustomBtn: "Bu metinle başla", lblTime: "Süre", lblWpm: "WPM", lblAcc: "Doğruluk", lblErr: "Hatalar", minuteUnit: "dk", hintHtml: "Yazmaya başlamak için buraya tıklayın. Yeniden başlamak için <kbd>Tab</kbd> veya aşağıdaki butona basın.", restart: "Yeniden başla", footer: "AkkhorBeg'de yazın <span class=\"heart\">♥</span> 1500+ yaygın kelimeden oluşturulan alıştırma", resultTitle: "Sonuç", rWpmLbl: "Kelime/dk (WPM)", rAccLbl: "Doğruluk", rCharsLbl: "Toplam karakter", rErrLbl: "Hata sayısı", chartLabel: "WPM Eğilimi", heatmapLabel: "Hata ısı haritası — en çok hata yapılan harfler", heatmapEmpty: "Hata yok — mükemmel doğruluk!", tryAgain: "Tekrar dene", noTextAlert: "Lütfen biraz metin yazın veya yapıştırın.", soundTitle: "Sesi aç/kapat", themeTitle: "Koyu/açık modu değiştir" },
+    it: { tagline: "Metti alla prova la tua velocità di battitura in italiano.", customPlaceholder: "Incolla qui il tuo testo in italiano...", wordMode: "Pratica di parole", customMode: "Testo personalizzato", randomizeLabel: "Mescola", useCustomBtn: "Inizia con questo testo", lblTime: "Tempo", lblWpm: "WPM", lblAcc: "Precisione", lblErr: "Errori", minuteUnit: "min", hintHtml: "Clicca qui per iniziare a digitare. Premi <kbd>Tab</kbd> o il pulsante sotto per ricominciare.", restart: "Ricomincia", footer: "Scrivi su AkkhorBeg <span class=\"heart\">♥</span> esercizio creato con oltre 1500 parole comuni", resultTitle: "Risultato", rWpmLbl: "Parole/min (WPM)", rAccLbl: "Precisione", rCharsLbl: "Caratteri totali", rErrLbl: "Numero errori", chartLabel: "Andamento WPM", heatmapLabel: "Mappa di calore degli errori — lettere più sbagliate", heatmapEmpty: "Nessun errore — precisione eccellente!", tryAgain: "Riprova", noTextAlert: "Per favore scrivi o incolla del testo.", soundTitle: "Attiva/disattiva suono", themeTitle: "Cambia modalità scura/chiara" },
+    ms: { tagline: "Uji kelajuan menaip Bahasa Melayu anda — pantas dan tepat.", customPlaceholder: "Tampal teks Bahasa Melayu anda di sini...", wordMode: "Latihan Perkataan", customMode: "Teks Tersuai", randomizeLabel: "Rawak", useCustomBtn: "Mula dengan teks ini", lblTime: "Masa", lblWpm: "WPM", lblAcc: "Ketepatan", lblErr: "Kesilapan", minuteUnit: "min", hintHtml: "Klik di sini untuk mula menaip. Tekan <kbd>Tab</kbd> atau butang di bawah untuk mula semula.", restart: "Mula Semula", footer: "Taip di AkkhorBeg <span class=\"heart\">♥</span> latihan dibina daripada 1,500+ perkataan biasa", resultTitle: "Keputusan", rWpmLbl: "Perkataan/min (WPM)", rAccLbl: "Ketepatan", rCharsLbl: "Jumlah Aksara", rErrLbl: "Bilangan Kesilapan", chartLabel: "Trend WPM", heatmapLabel: "Peta Haba Ralat — huruf paling banyak silap", heatmapEmpty: "Tiada kesilapan — ketepatan cemerlang!", tryAgain: "Cuba Lagi", noTextAlert: "Sila tulis atau tampal sedikit teks.", soundTitle: "Togol bunyi", themeTitle: "Tukar mod gelap/terang" },
+    ja: { tagline: "日本語のタイピング速度をテストしましょう — 速く、正確に。", customPlaceholder: "ここに日本語のテキストを貼り付けてください...", wordMode: "単語練習", customMode: "カスタムテキスト", randomizeLabel: "ランダム化", useCustomBtn: "このテキストで開始", lblTime: "時間", lblWpm: "WPM", lblAcc: "正確率", lblErr: "エラー", minuteUnit: "分", hintHtml: "ここをクリックして入力を開始してください。再開するには <kbd>Tab</kbd> または下のボタンを押してください。", restart: "リスタート", footer: "アッコルベグでタイプ <span class=\"heart\">♥</span> 1500以上の一般的な単語による練習", resultTitle: "結果", rWpmLbl: "単語/分 (WPM)", rAccLbl: "正確率", rCharsLbl: "総文字数", rErrLbl: "エラー数", chartLabel: "WPM推移", heatmapLabel: "エラーヒートマップ — 最も間違えやすい文字", heatmapEmpty: "ミスなし — 素晴らしい正確さです！", tryAgain: "もう一度挑戦", noTextAlert: "テキストを入力または貼り付けてください。", soundTitle: "サウンドのオン/オフ", themeTitle: "ダーク/ライトモード切替" },
+    zh: { tagline: "测试您的中文打字速度 — 快速、准确。", customPlaceholder: "在此粘贴您自己的中文文本...", wordMode: "单词练习", customMode: "自定义文本", randomizeLabel: "随机排列", useCustomBtn: "用此文本开始", lblTime: "时间", lblWpm: "WPM", lblAcc: "准确率", lblErr: "错误", minuteUnit: "分钟", hintHtml: "点击此处开始打字。按 <kbd>Tab</kbd> 或下方按钮重新开始。", restart: "重新开始", footer: "在 AkkhorBeg 中打字 <span class=\"heart\">♥</span> 基于1500多个常用词的练习", resultTitle: "结果", rWpmLbl: "单词/分钟 (WPM)", rAccLbl: "准确率", rCharsLbl: "总字符数", rErrLbl: "错误数", chartLabel: "WPM 趋势", heatmapLabel: "错误热图 — 哪些字符错得最多", heatmapEmpty: "没有错误 — 准确率极佳！", tryAgain: "再试一次", noTextAlert: "请输入或粘贴一些文本。", soundTitle: "开关声音", themeTitle: "切换深色/浅色模式" },
+    ko: { tagline: "한국어 타이핑 속도를 테스트하세요 — 빠르고 정확하게.", customPlaceholder: "여기에 한국어 텍스트를 붙여넣으세요...", wordMode: "단어 연습", customMode: "사용자 지정 텍스트", randomizeLabel: "무작위로 섞기", useCustomBtn: "이 텍스트로 시작", lblTime: "시간", lblWpm: "WPM", lblAcc: "정확도", lblErr: "오류", minuteUnit: "분", hintHtml: "타이핑을 시작하려면 여기를 클릭하세요. 다시 시작하려면 <kbd>Tab</kbd> 또는 아래 버튼을 누르세요.", restart: "다시 시작", footer: "AkkhorBeg에서 타이핑 <span class=\"heart\">♥</span> 1,500개 이상의 일반 단어로 만든 연습", resultTitle: "결과", rWpmLbl: "단어/분 (WPM)", rAccLbl: "정확도", rCharsLbl: "총 문자 수", rErrLbl: "오류 수", chartLabel: "WPM 추세", heatmapLabel: "오류 히트맵 — 가장 많이 틀리는 글자", heatmapEmpty: "오류 없음 — 훌륭한 정확도입니다!", tryAgain: "다시 시도", noTextAlert: "텍스트를 입력하거나 붙여넣어 주세요.", soundTitle: "소리 켜기/끄기", themeTitle: "다크/라이트 모드 전환" },
+  };
+
+
+  const els = {
+    textDisplay: document.getElementById('textDisplay'),
+    hiddenInput: document.getElementById('hiddenInput'),
+    typeCard: document.getElementById('typeCard'),
+    timeLeft: document.getElementById('timeLeft'),
+    wpmStat: document.getElementById('wpmStat'),
+    accStat: document.getElementById('accStat'),
+    errStat: document.getElementById('errStat'),
+    restartBtn: document.getElementById('restartBtn'),
+    timeControls: document.getElementById('timeControls'),
+    wordModeBtn: document.getElementById('wordModeBtn'),
+    customModeBtn: document.getElementById('customModeBtn'),
+    customBox: document.getElementById('customBox'),
+    customText: document.getElementById('customText'),
+    useCustomBtn: document.getElementById('useCustomBtn'),
+    randomizeChk: document.getElementById('randomizeChk'),
+    resultOverlay: document.getElementById('resultOverlay'),
+    themeToggle: document.getElementById('themeToggle'),
+    soundToggle: document.getElementById('soundToggle'),
+    langRow: document.getElementById('langRow'),
+    taglineText: document.getElementById('taglineText'),
+    progressFill: document.getElementById('progressFill'),
+    randomizeLabel: document.getElementById('randomizeLabel'),
+    lblTime: document.getElementById('lblTime'),
+    lblWpm: document.getElementById('lblWpm'),
+    lblAcc: document.getElementById('lblAcc'),
+    lblErr: document.getElementById('lblErr'),
+    typeHint: document.getElementById('typeHint'),
+    footerText: document.getElementById('footerText'),
+    resultTitle: document.getElementById('resultTitle'),
+    rWpmLbl: document.getElementById('rWpmLbl'),
+    rAccLbl: document.getElementById('rAccLbl'),
+    rCharsLbl: document.getElementById('rCharsLbl'),
+    rErrLbl: document.getElementById('rErrLbl'),
+    chartLabel: document.getElementById('chartLabel'),
+    heatmapLabel: document.getElementById('heatmapLabel'),
+    rWpm: document.getElementById('rWpm'),
+    rAcc: document.getElementById('rAcc'),
+    rChars: document.getElementById('rChars'),
+    rErr: document.getElementById('rErr'),
+    tryAgainBtn: document.getElementById('tryAgainBtn'),
+    wpmChart: document.getElementById('wpmChart'),
+    heatmapBox: document.getElementById('heatmapBox'),
+  };
+
+  let state = {
+    lang: 'bn',
+    duration: 180,
+    mode: 'word', // word | custom
+    customSource: '',
+    randomize: false,
+    text: '',
+    chars: [], // array of {ch, status: 'pending'|'correct'|'wrong'}
+    pos: 0,
+    startTime: null,
+    timer: null,
+    remaining: 180,
+    totalTyped: 0,
+    totalErrors: 0,
+    finished: false,
+    wpmHistory: [], // {t, wpm}
+    keyErrors: {}, // char -> count
+    soundOn: true,
+  };
+
+  // ---------- Keystroke sound engine (Web Audio, no external files) ----------
+  let audioCtx = null;
+  function ensureAudio(){
+    if(!audioCtx){
+      try{ audioCtx = new (window.AudioContext || window.webkitAudioContext)(); }
+      catch(e){ audioCtx = null; }
+    }
+    return audioCtx;
+  }
+  function playBeep(freq, duration, type){
+    if(!state.soundOn) return;
+    const ctx = ensureAudio();
+    if(!ctx) return;
+    if(ctx.state === 'suspended') ctx.resume();
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.type = type || 'sine';
+    osc.frequency.value = freq;
+    gain.gain.setValueAtTime(0.0001, ctx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.12, ctx.currentTime + 0.005);
+    gain.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + duration);
+    osc.connect(gain);
+    gain.connect(ctx.destination);
+    osc.start();
+    osc.stop(ctx.currentTime + duration + 0.02);
+  }
+  function playCorrectSound(){ playBeep(720, 0.045, 'sine'); }
+  function playWrongSound(){ playBeep(160, 0.09, 'square'); }
+  function playDoneSound(){
+    playBeep(523, 0.12, 'sine');
+    setTimeout(() => playBeep(659, 0.12, 'sine'), 110);
+    setTimeout(() => playBeep(784, 0.18, 'sine'), 220);
+  }
+
+  function shuffle(arr){
+    const a = arr.slice();
+    for(let i=a.length-1;i>0;i--){
+      const j = Math.floor(Math.random()*(i+1));
+      [a[i],a[j]]=[a[j],a[i]];
+    }
+    return a;
+  }
+
+  function buildWordText(targetCharCount){
+    let words = [];
+    let total = 0;
+    const pool = shuffle(WORD_BANKS[state.lang] || WORD_BANK_BN);
+    let i = 0;
+    while(total < targetCharCount){
+      const w = pool[i % pool.length];
+      words.push(w);
+      total += w.length + 1;
+      i++;
+    }
+    return words.join(' ');
+  }
+
+  const ALL_LANG_CLASSES = ['lang-en','lang-hi','lang-ur','lang-ar','lang-ru','lang-fr','lang-es','lang-de','lang-tr','lang-it','lang-ms','lang-ja','lang-zh','lang-ko'];
+  const RTL_LANGS = ['ur','ar'];
+
+  function setText(str){
+    state.text = str;
+    state.chars = str.split('').map(ch => ({ch, status:'pending'}));
+    state.pos = 0;
+    els.textDisplay.classList.remove(...ALL_LANG_CLASSES);
+    const cls = 'lang-' + state.lang;
+    if(ALL_LANG_CLASSES.includes(cls)) els.textDisplay.classList.add(cls);
+    els.textDisplay.setAttribute('dir', RTL_LANGS.includes(state.lang) ? 'rtl' : 'ltr');
+    renderText();
+  }
+
+  function renderText(){
+    const frag = document.createDocumentFragment();
+    state.chars.forEach((c, idx) => {
+      const span = document.createElement('span');
+      span.textContent = c.ch;
+      if(idx === state.pos){
+        span.className = 'char-cursor ' + (c.status === 'pending' ? 'char-pending' : c.status === 'correct' ? 'char-correct' : 'char-wrong');
+      } else if(c.status === 'correct'){
+        span.className = 'char-correct';
+      } else if(c.status === 'wrong'){
+        span.className = 'char-wrong';
+      } else {
+        span.className = 'char-pending';
+      }
+      frag.appendChild(span);
+    });
+    els.textDisplay.innerHTML = '';
+    els.textDisplay.appendChild(frag);
+    // scroll cursor into view
+    const cursorEl = els.textDisplay.querySelector('.char-cursor');
+    if(cursorEl) cursorEl.scrollIntoView({block:'nearest'});
+    // update progress
+    const pct = state.chars.length ? Math.min(100, (state.pos / state.chars.length) * 100) : 0;
+    els.progressFill.style.width = pct + '%';
+  }
+
+  function fmtTime(sec){
+    const m = Math.floor(sec/60);
+    const s = sec%60;
+    return toBnDigits(m) + ':' + toBnDigits(s.toString().padStart(2,'0'));
+  }
+
+  const bnDigitMap = {'0':'০','1':'১','2':'২','3':'৩','4':'৪','5':'৫','6':'৬','7':'৭','8':'৮','9':'৯'};
+  function toBnDigits(n){
+    if(state.lang !== 'bn') return n.toString();
+    return n.toString().split('').map(ch => bnDigitMap[ch] !== undefined ? bnDigitMap[ch] : ch).join('');
+  }
+
+  function updateLiveStats(){
+    if(!state.startTime){
+      els.wpmStat.textContent = toBnDigits(0);
+      els.accStat.textContent = toBnDigits(100) + '%';
+      els.errStat.textContent = toBnDigits(0);
+      return;
+    }
+    const elapsedMin = (Date.now() - state.startTime) / 60000;
+    const correctChars = state.chars.slice(0, state.pos).filter(c => c.status === 'correct').length;
+    const wpm = elapsedMin > 0 ? Math.round((correctChars / 5) / elapsedMin) : 0;
+    const acc = state.totalTyped > 0 ? Math.round(((state.totalTyped - state.totalErrors) / state.totalTyped) * 100) : 100;
+    els.wpmStat.textContent = toBnDigits(Math.max(0,wpm));
+    els.accStat.textContent = toBnDigits(Math.max(0,acc)) + '%';
+    els.errStat.textContent = toBnDigits(state.totalErrors);
+  }
+
+  function startTimer(){
+    state.remaining = state.duration;
+    els.timeLeft.textContent = fmtTime(state.remaining);
+    state.timer = setInterval(() => {
+      state.remaining--;
+      els.timeLeft.textContent = fmtTime(Math.max(0,state.remaining));
+      updateLiveStats();
+      const elapsedSec = (state.duration - state.remaining);
+      const elapsedMin = elapsedSec / 60;
+      const correctChars = state.chars.slice(0, state.pos).filter(c => c.status === 'correct').length;
+      const curWpm = elapsedMin > 0 ? Math.round((correctChars / 5) / elapsedMin) : 0;
+      state.wpmHistory.push({ t: elapsedSec, wpm: Math.max(0, curWpm) });
+      if(state.remaining <= 0){
+        finishTest();
+      }
+    }, 1000);
+  }
+
+  function stopTimer(){
+    if(state.timer){ clearInterval(state.timer); state.timer = null; }
+  }
+
+  function finishTest(){
+    if(state.finished) return;
+    state.finished = true;
+    stopTimer();
+    const elapsedMin = state.startTime ? (Date.now() - state.startTime) / 60000 : (state.duration/60);
+    const correctChars = state.chars.slice(0, state.pos).filter(c => c.status === 'correct').length;
+    const wpm = elapsedMin > 0 ? Math.round((correctChars / 5) / elapsedMin) : 0;
+    const acc = state.totalTyped > 0 ? Math.round(((state.totalTyped - state.totalErrors) / state.totalTyped) * 100) : 100;
+    els.rWpm.textContent = toBnDigits(Math.max(0,wpm));
+    els.rAcc.textContent = toBnDigits(Math.max(0,acc)) + '%';
+    els.rChars.textContent = toBnDigits(state.totalTyped);
+    els.rErr.textContent = toBnDigits(state.totalErrors);
+    if(state.wpmHistory.length === 0){
+      state.wpmHistory.push({ t:0, wpm: Math.max(0,wpm) });
+    }
+    drawWpmChart();
+    drawHeatmap();
+    playDoneSound();
+    els.resultOverlay.classList.add('show');
+    els.hiddenInput.blur();
+  }
+
+  function drawWpmChart(){
+    const canvas = els.wpmChart;
+    const dpr = window.devicePixelRatio || 1;
+    const cssWidth = canvas.parentElement.clientWidth - 20;
+    const cssHeight = 120;
+    canvas.width = cssWidth * dpr;
+    canvas.height = cssHeight * dpr;
+    canvas.style.width = cssWidth + 'px';
+    canvas.style.height = cssHeight + 'px';
+    const ctx = canvas.getContext('2d');
+    ctx.scale(dpr, dpr);
+    ctx.clearRect(0,0,cssWidth,cssHeight);
+
+    const data = state.wpmHistory;
+    const maxWpm = Math.max(10, ...data.map(d => d.wpm));
+    const padL = 32, padR = 8, padT = 10, padB = 18;
+    const plotW = cssWidth - padL - padR;
+    const plotH = cssHeight - padT - padB;
+
+    const styles = getComputedStyle(document.documentElement);
+    const lineColor = styles.getPropertyValue('--terracotta').trim() || '#bb4430';
+    const gridColor = styles.getPropertyValue('--line').trim() || '#d8c8a8';
+    const textColor = styles.getPropertyValue('--muted').trim() || '#8a7a5c';
+    const fillTop = lineColor;
+
+    // grid lines (3 horizontal)
+    ctx.strokeStyle = gridColor;
+    ctx.lineWidth = 1;
+    ctx.font = '10px JetBrains Mono, monospace';
+    ctx.fillStyle = textColor;
+    for(let i = 0; i <= 2; i++){
+      const y = padT + (plotH * i / 2);
+      ctx.beginPath();
+      ctx.moveTo(padL, y);
+      ctx.lineTo(cssWidth - padR, y);
+      ctx.stroke();
+      const val = Math.round(maxWpm - (maxWpm * i / 2));
+      ctx.fillText(String(val), 2, y + 3);
+    }
+
+    if(data.length < 2){
+      return;
+    }
+
+    const maxT = data[data.length-1].t || 1;
+    function xFor(t){ return padL + (t / maxT) * plotW; }
+    function yFor(w){ return padT + plotH - (w / maxWpm) * plotH; }
+
+    // area fill
+    ctx.beginPath();
+    ctx.moveTo(xFor(data[0].t), yFor(data[0].wpm));
+    data.forEach(d => ctx.lineTo(xFor(d.t), yFor(d.wpm)));
+    ctx.lineTo(xFor(data[data.length-1].t), padT + plotH);
+    ctx.lineTo(xFor(data[0].t), padT + plotH);
+    ctx.closePath();
+    ctx.fillStyle = fillTop + '22';
+    try{ ctx.fill(); }catch(e){}
+
+    // line
+    ctx.beginPath();
+    ctx.moveTo(xFor(data[0].t), yFor(data[0].wpm));
+    data.forEach(d => ctx.lineTo(xFor(d.t), yFor(d.wpm)));
+    ctx.strokeStyle = lineColor;
+    ctx.lineWidth = 2.2;
+    ctx.lineJoin = 'round';
+    ctx.stroke();
+
+    // dots
+    ctx.fillStyle = lineColor;
+    data.forEach(d => {
+      ctx.beginPath();
+      ctx.arc(xFor(d.t), yFor(d.wpm), 2.2, 0, Math.PI*2);
+      ctx.fill();
+    });
+  }
+
+  function heatColor(ratio){
+    // ratio 0..1 -> from gold (low) to terracotta (high)
+    const r1=[201,138,44], r2=[187,68,48];
+    const r = Math.round(r1[0] + (r2[0]-r1[0])*ratio);
+    const g = Math.round(r1[1] + (r2[1]-r1[1])*ratio);
+    const b = Math.round(r1[2] + (r2[2]-r1[2])*ratio);
+    return `rgb(${r},${g},${b})`;
+  }
+
+  function drawHeatmap(){
+    const entries = Object.entries(state.keyErrors).sort((a,b) => b[1]-a[1]).slice(0, 14);
+    els.heatmapBox.innerHTML = '';
+    if(entries.length === 0){
+      const p = document.createElement('div');
+      p.className = 'heatmap-empty';
+      p.textContent = (STRINGS[state.lang] || STRINGS.bn).heatmapEmpty;
+      els.heatmapBox.appendChild(p);
+      return;
+    }
+    const maxCount = entries[0][1];
+    entries.forEach(([ch, count]) => {
+      const tile = document.createElement('div');
+      tile.className = 'heat-tile';
+      const ratio = maxCount > 0 ? count / maxCount : 0;
+      tile.style.background = heatColor(ratio);
+      tile.textContent = ch === ' ' ? '␣' : ch;
+      const badge = document.createElement('span');
+      badge.className = 'heat-count';
+      badge.textContent = toBnDigits(count);
+      tile.appendChild(badge);
+      els.heatmapBox.appendChild(tile);
+    });
+  }
+
+  function resetTest(){
+    stopTimer();
+    state.startTime = null;
+    state.pos = 0;
+    state.totalTyped = 0;
+    state.totalErrors = 0;
+    state.finished = false;
+    state.wpmHistory = [];
+    state.keyErrors = {};
+    els.resultOverlay.classList.remove('show');
+
+    let source;
+    if(state.mode === 'custom' && state.customSource.trim()){
+      source = state.customSource.trim();
+      if(state.randomize){
+        source = shuffle(source.split(/\s+/)).join(' ');
+      }
+    } else {
+      // build enough words to cover the full duration generously
+      const approxCharsPerSec = 6; // generous upper bound
+      const targetChars = Math.max(400, state.duration * approxCharsPerSec);
+      source = buildWordText(targetChars);
+    }
+    setText(source);
+    els.timeLeft.textContent = fmtTime(state.duration);
+    updateLiveStats();
+    els.hiddenInput.value = '';
+    focusInput();
+  }
+
+  function focusInput(){
+    els.hiddenInput.focus();
+  }
+
+  els.typeCard.addEventListener('click', focusInput);
+
+  els.hiddenInput.addEventListener('keydown', (e) => {
+    if(state.finished) return;
+    if(e.key === 'Tab'){
+      e.preventDefault();
+      resetTest();
+      return;
+    }
+    if(e.key === 'Backspace'){
+      e.preventDefault();
+      if(state.pos > 0){
+        state.pos--;
+        state.chars[state.pos].status = 'pending';
+        renderText();
+        updateLiveStats();
+      }
+      return;
+    }
+    // ignore non-character control keys
+    if(e.key.length !== 1 && e.key !== ' '){
+      return;
+    }
+    e.preventDefault();
+    if(!state.startTime){
+      state.startTime = Date.now();
+      startTimer();
+    }
+    if(state.pos >= state.chars.length){
+      return;
+    }
+    const expected = state.chars[state.pos].ch;
+    const typedCh = e.key === ' ' ? ' ' : e.key;
+    state.totalTyped++;
+    if(typedCh === expected){
+      state.chars[state.pos].status = 'correct';
+      playCorrectSound();
+    } else {
+      state.chars[state.pos].status = 'wrong';
+      state.totalErrors++;
+      state.keyErrors[expected] = (state.keyErrors[expected] || 0) + 1;
+      playWrongSound();
+    }
+    state.pos++;
+    renderText();
+    updateLiveStats();
+    if(state.pos >= state.chars.length){
+      finishTest();
+    }
+  });
+
+  // Mobile: composition input fallback (for soft keyboards / IME)
+  els.hiddenInput.addEventListener('input', () => {
+    // We rely primarily on keydown; clear any stray value to avoid duplication
+    els.hiddenInput.value = '';
+  });
+
+  els.restartBtn.addEventListener('click', resetTest);
+  els.tryAgainBtn.addEventListener('click', resetTest);
+
+  // Time selection
+  els.timeControls.addEventListener('click', (e) => {
+    const btn = e.target.closest('.time-btn');
+    if(!btn) return;
+    document.querySelectorAll('.time-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    state.duration = parseInt(btn.dataset.time, 10);
+    resetTest();
+  });
+
+  // Mode switching
+  els.wordModeBtn.addEventListener('click', () => {
+    state.mode = 'word';
+    els.wordModeBtn.classList.add('active');
+    els.customModeBtn.classList.remove('active');
+    els.customBox.classList.remove('show');
+    els.timeControls.style.display = 'flex';
+    resetTest();
+  });
+
+  els.customModeBtn.addEventListener('click', () => {
+    state.mode = 'custom';
+    els.customModeBtn.classList.add('active');
+    els.wordModeBtn.classList.remove('active');
+    els.customBox.classList.add('show');
+  });
+
+  els.useCustomBtn.addEventListener('click', () => {
+    state.customSource = els.customText.value || '';
+    state.randomize = els.randomizeChk.checked;
+    if(!state.customSource.trim()){
+      alert((STRINGS[state.lang] || STRINGS.bn).noTextAlert);
+      return;
+    }
+    resetTest();
+  });
+
+  // ---------- Language switching (full UI translation) ----------
+
+  function applyUILanguage(lang){
+    const s = STRINGS[lang] || STRINGS.bn;
+    document.documentElement.lang = lang;
+    document.documentElement.dir = RTL_LANGS.includes(lang) ? 'rtl' : 'ltr';
+    document.body.classList.toggle('is-rtl', RTL_LANGS.includes(lang));
+
+    els.taglineText.textContent = s.tagline;
+    els.customText.placeholder = s.customPlaceholder;
+    els.wordModeBtn.textContent = s.wordMode;
+    els.customModeBtn.textContent = s.customMode;
+    els.randomizeLabel.textContent = s.randomizeLabel;
+    els.useCustomBtn.textContent = s.useCustomBtn;
+    els.lblTime.textContent = s.lblTime;
+    els.lblWpm.textContent = s.lblWpm;
+    els.lblAcc.textContent = s.lblAcc;
+    els.lblErr.textContent = s.lblErr;
+    els.typeHint.innerHTML = s.hintHtml;
+    els.restartBtn.textContent = s.restart;
+    els.footerText.innerHTML = s.footer;
+    els.resultTitle.textContent = s.resultTitle;
+    els.rWpmLbl.textContent = s.rWpmLbl;
+    els.rAccLbl.textContent = s.rAccLbl;
+    els.rCharsLbl.textContent = s.rCharsLbl;
+    els.rErrLbl.textContent = s.rErrLbl;
+    els.chartLabel.textContent = s.chartLabel;
+    els.heatmapLabel.textContent = s.heatmapLabel;
+    els.tryAgainBtn.textContent = s.tryAgain;
+    els.soundToggle.title = s.soundTitle;
+    els.themeToggle.title = s.themeTitle;
+
+    document.querySelectorAll('.time-btn').forEach(btn => {
+      const mins = btn.dataset.min;
+      if(lang === 'bn'){
+        btn.textContent = toBnDigits(mins) + ' ' + s.minuteUnit;
+      } else {
+        btn.textContent = mins + ' ' + s.minuteUnit;
+      }
+    });
+  }
+
+  els.langRow.addEventListener('click', (e) => {
+    const btn = e.target.closest('.lang-btn');
+    if(!btn) return;
+    document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    state.lang = btn.dataset.lang;
+    applyUILanguage(state.lang);
+    if(state.mode === 'word'){
+      resetTest();
+    } else {
+      els.timeLeft.textContent = fmtTime(state.remaining || state.duration);
+      updateLiveStats();
+    }
+  });
+
+  // ---------- Sound toggle ----------
+  els.soundToggle.addEventListener('click', () => {
+    state.soundOn = !state.soundOn;
+    els.soundToggle.textContent = state.soundOn ? '🔊' : '🔇';
+    if(state.soundOn){ ensureAudio(); playCorrectSound(); }
+  });
+
+  // ---------- Theme toggle ----------
+  let isDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+  function applyTheme(){
+    document.documentElement.setAttribute('data-theme', isDark ? 'dark' : 'light');
+    els.themeToggle.textContent = isDark ? '☀️' : '🌙';
+  }
+  els.themeToggle.addEventListener('click', () => {
+    isDark = !isDark;
+    applyTheme();
+  });
+  applyTheme();
+
+  window.addEventListener('resize', () => {
+    if(els.resultOverlay.classList.contains('show')) drawWpmChart();
+  });
+
+  // init
+  applyUILanguage(state.lang);
+  resetTest();
+})();
+</script>
+</body>
+</html>
