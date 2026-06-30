@@ -19,6 +19,7 @@
     --good:#2c5d54;
     --bad:#bb4430;
     --muted:#8a7a5c;
+    --pending:#5c4d34;
     --card:#fbf6ea;
     --shadow:rgba(35,24,21,0.06);
     --overlay-bg:rgba(35,24,21,0.55);
@@ -37,6 +38,7 @@
     --good:#4fae9c;
     --bad:#e0654a;
     --muted:#a39879;
+    --pending:#cabd9b;
     --card:#1c1913;
     --shadow:rgba(0,0,0,0.45);
     --overlay-bg:rgba(0,0,0,0.7);
@@ -338,9 +340,9 @@
   #textDisplay.lang-ja{ font-family:'Noto Sans JP', sans-serif; }
   #textDisplay.lang-zh{ font-family:'Noto Sans SC', sans-serif; }
   #textDisplay.lang-ko{ font-family:'Noto Sans KR', sans-serif; }
-  .char-pending{ color:#b6a989; }
-  .char-correct{ color:var(--good); }
-  .char-wrong{ color:var(--bad); background:rgba(187,68,48,0.14); border-radius:3px; }
+  .char-pending{ color:var(--pending); }
+  .char-correct{ color:var(--good); font-weight:600; }
+  .char-wrong{ color:var(--bad); font-weight:600; background:rgba(187,68,48,0.18); border-radius:3px; }
   .char-cursor{
     border-left:2.5px solid var(--terracotta);
     animation:blink 1s step-start infinite;
